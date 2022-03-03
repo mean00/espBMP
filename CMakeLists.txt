@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(idf_as_lib C)
+project(espMagic C CXX)
 include(./platformConfig.cmake)
 set(targets "esp32" "esp32s2" "esp32s3" "esp32c3" "esp32h2" "esp32c2")
 
@@ -21,9 +21,10 @@ idf_build_process("${TARGET}"
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(elf_file ${CMAKE_PROJECT_NAME}.elf)
-add_executable(${elf_file} src/main.c)
+add_executable(${elf_file} src/main.cpp)
 
-target_link_libraries(${elf_file} "idf::${TARGET}" idf::freertos idf::spi_flash)
+target_link_libraries(${elf_file} "idf::${TARGET}" idf::freertos idf::spi_flash idf::nvs_flash)
 # Attach additional targets to the executable file for flashing,
 # linker script generation, partition_table generation, etc.
 idf_build_executable(${elf_file})
+include_directories("${CMAKE_SOURCE_DIR}")

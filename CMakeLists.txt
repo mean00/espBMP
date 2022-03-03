@@ -24,8 +24,7 @@ add_executable(${elf_file} src/main.cpp)
 
 
 target_link_libraries(${elf_file} "idf::${TARGET}" idf::freertos idf::spi_flash idf::nvs_flash blackmagic)
-# Attach additional targets to the executable file for flashing,
-# linker script generation, partition_table generation, etc.
 idf_build_executable(${elf_file})
 
+# We glue blackmagic here
 include(./blackmagic.cmake)

@@ -1,21 +1,25 @@
 /*
 
  */
+ extern "C"
+ {
 #include "version.h"
 
 #include "gdb_packet.h"
 #include "gdb_main.h"
 #include "target.h"
-#include "exception.h"
 #include "gdb_packet.h"
 #include "morse.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-
+}
 #define GPIO_OUTPUT_PIN_SEL  ((1<<SWCLK_PIN) | (1<<SWDIO_PIN) | (1<<TMS_PIN) | (1<<TDI_PIN) | (1<<TDO_PIN) | (1<<TCK_PIN))
 
+uint32_t swd_delay_cnt=0;
 
+extern "C"
+{
 void pins_init() {
 }
 
@@ -65,15 +69,8 @@ void main_task(void *parameters)
 
 	while (true) {
 
-		volatile struct exception e;
-		TRY_CATCH(e, EXCEPTION_ALL) {
 			gdb_main();
-		}
-		if (e.type) {
-			gdb_putpacketz("EFF");
-			target_list_free();
-			morse("TARGET LOST.", 1);
-		}
+
 	}
 
 	/* Should never get here */
@@ -82,4 +79,34 @@ void main_task(void *parameters)
 void user_init(void)
 {
 	xTaskCreate(&main_task, "main", 4*256, NULL, 2, NULL);
+}
+
+
+int gdb_if_init(void)
+{
+    return 0;
+}
+unsigned char gdb_if_getchar(void)
+{
+    return 0;
+}
+unsigned char gdb_if_getchar_to(int timeout)
+{
+  return 0;
+}
+
+
+void gdb_if_putchar(unsigned char c, int flush)
+{
+
+}
+void platform_max_frequency_set(uint32_t freq)
+{
+
+}
+uint32_t platform_max_frequency_get()
+{
+
+}
+
 }

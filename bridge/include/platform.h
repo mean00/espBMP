@@ -32,14 +32,11 @@
 #define SET_RUN_STATE(state)
 #define SET_IDLE_STATE(state)
 #define SET_ERROR_STATE(state)
+
 #define DEBUG(x, ...) do { ; } while (0)
 //#define DEBUG printf
 
 #include "timing.h"
-// FX #include "/opt/esp/esp-idf/./components/driver/include/driver/gpio.h"
-// FX #include "driver/gpio.h"
-//#include <freertos/FreeRTOS.h>
-
 #define BOARD_IDENT "Black Magic Probe (esp32), (Firmware 0.1)"
 
 #define TMS_SET_MODE() do { } while (0)
@@ -67,29 +64,16 @@
 #define SWDIO_PIN (17)  // On wroover module, this is PSRAM clock
 #define SWCLK_PIN (23)
 
-#define gpio_set_val(port, pin, value) do {	\
-		gpio_set_level(pin, value);		\
-		/*sdk_os_delay_us(2);	*/	\
-	} while (0);
-
-#define gpio_set(port, pin) gpio_set_val(port, pin, 1)
-#define gpio_clear(port, pin) gpio_set_val(port, pin, 0)
-#define gpio_get(port, pin) gpio_get_level(pin)
-
-// TODO https://esp-idf.readthedocs.io/en/v2.0/api/peripherals/gpio.html#_CPPv216gpio_pull_mode_t
-// GPIO_FLOATING
-// 		gpio_enable(SWDIO_PIN, GPIO_INPUT);
-#define SWDIO_MODE_FLOAT() do {			\
-		gpio_set_direction(SWDIO_PIN, GPIO_MODE_INPUT);		\
-		gpio_set_pull_mode(SWDIO_PIN, GPIO_FLOATING);		\
-	} while (0)
-
- //gpio_enable(SWDIO_PIN, GPIO_OUTPUT);
-
-#define SWDIO_MODE_DRIVE() do {				\
-           gpio_set_direction(SWDIO_PIN, GPIO_MODE_OUTPUT);		\
-	} while (0)
+#define gpio_set_val(port, pin, value) {}
+#define gpio_set(port, pin) {}
+#define gpio_clear(port, pin) {}
+#define gpio_get(port, pin) 0
+#define SWDIO_MODE_FLOAT() {}
+#define SWDIO_MODE_DRIVE() {}
 
 //#define PLATFORM_HAS_DEBUG 1
 //#define ENABLE_DEBUG 1
+
+extern uint32_t swd_delay_cnt;
+
 #endif

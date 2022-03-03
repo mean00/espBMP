@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.5)
 
 project(espMagic C CXX)
 include(./platformConfig.cmake)
-set(targets "esp32" "esp32s2" "esp32s3" "esp32c3" "esp32h2" "esp32c2")
 
 # Include for ESP-IDF build system functions
 include($ENV{IDF_PATH}/tools/cmake/idf.cmake)
@@ -14,7 +13,7 @@ idf_build_process("${TARGET}"
                     # although esptool_py does not generate static library,
                     # processing the component is needed for flashing related
                     # targets and file generation
-                    COMPONENTS "${TARGET}" freertos esptool_py
+                    COMPONENTS "${TARGET}" freertos esptool_py esp_common driver
                     SDKCONFIG ${CMAKE_CURRENT_LIST_DIR}/sdkconfig
                     BUILD_DIR ${CMAKE_BINARY_DIR})
 
@@ -23,8 +22,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(elf_file ${CMAKE_PROJECT_NAME}.elf)
 add_executable(${elf_file} src/main.cpp)
 
-target_link_libraries(${elf_file} "idf::${TARGET}" idf::freertos idf::spi_flash idf::nvs_flash)
+
+target_link_libraries(${elf_file} "idf::${TARGET}" idf::freertos idf::spi_flash idf::nvs_flash blackmagic)
 # Attach additional targets to the executable file for flashing,
 # linker script generation, partition_table generation, etc.
 idf_build_executable(${elf_file})
-include_directories("${CMAKE_SOURCE_DIR}")
+
+include(./blackmagic.cmake)

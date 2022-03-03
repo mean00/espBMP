@@ -17,10 +17,10 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 
-#include "myWifi.h"
+#include "../myWifi.h"
 
 
-
+extern void user_init();
 /* The event group allows multiple bits for each event, but we only care about two events:
  * - we are connected to the AP with an IP
  * - we failed to connect after the maximum amount of retries */
@@ -157,7 +157,7 @@ extern "C" void app_main(void)
     wifi_init_sta();
 	xEventGroupWaitBits(s_wifi_event_group, WIFI_CONNECTED_BIT, false, true, portMAX_DELAY);
 	printf("--Connected ");
-
+  user_init(); // go !
 
     while(1)
     {

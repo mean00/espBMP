@@ -39,7 +39,7 @@ bool platform_srst_get_val(void)
 
 const char *platform_target_voltage(void)
 {
-
+  return "??";
 }
 
 uint32_t platform_time_ms(void)
@@ -106,7 +106,7 @@ void platform_max_frequency_set(uint32_t freq)
 }
 uint32_t platform_max_frequency_get()
 {
-
+  return 160*1000*1000;
 }
 
 }

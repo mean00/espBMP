@@ -17,7 +17,7 @@ SET(T ${CMAKE_SOURCE_DIR}/blackmagic/src/target )
 SET(P ${CMAKE_SOURCE_DIR}/blackmagic/src/platforms )
 SET(BRIDGE ${CMAKE_SOURCE_DIR}/bridge/src)
 
-SET(BRIDGE_SRCS ${BRIDGE}/bridge.cpp)
+SET(BRIDGE_SRCS ${BRIDGE}/bridge.cpp ${BRIDGE}/bmp_gpio.cpp)
 SET(BM_SRC ${S}/command.c ${S}/crc32.c ${S}/exception.c ${S}/gdb_hostio.c ${S}/gdb_main.c ${S}/gdb_packet.c ${S}/hex_utils.c ${S}/morse.c ${S}/remote.c ${S}/timing.c)
 SET(BM_TARGET ${T}/adiv5.c ${T}/adiv5_swdp.c ${T}/cortexm.c ${T}/jtag_devs.c
     ${T}/jtagtap_generic.c ${T}/lmi.c ${T}/lpc15xx.c ${T}/lpc43xx.c
@@ -33,7 +33,7 @@ target_compile_definitions(blackmagic PRIVATE PLATFORM_IDENT="ESP32" PC_HOSTED=0
 
 
 target_include_directories( blackmagic PRIVATE ${IDF_PATH}/components/soc/${TARGET}/include)
-SET(THINGS_TO_IMPORT riscv soc esp_rom esp_timer esp_system newlib heap freertos  esp_hw_support hal esp_common)
+SET(THINGS_TO_IMPORT riscv soc esp_rom esp_timer esp_system newlib heap freertos  esp_hw_support hal esp_common driver)
 FOREACH(T ${THINGS_TO_IMPORT})
     IMPORT_COMPONENTS( ${T})
 ENDFOREACH()

@@ -21,11 +21,6 @@
 #ifndef __PLATFORM_H
 #define __PLATFORM_H
 
-#undef PRIx32
-#define PRIx32 "x"
-
-#undef SCNx32
-#define SCNx32 "x"
 
 #define NO_USB_PLEASE
 
@@ -39,40 +34,35 @@
 #include "timing.h"
 #define BOARD_IDENT "Black Magic Probe (esp32), (Firmware 0.1)"
 
+//#define PLATFORM_HAS_TRACESWO 1
+//#define PLATFORM_HAS_DEBUG 1
+//#define ENABLE_DEBUG 1
+
 #define TMS_SET_MODE() do { } while (0)
 
-#define TMS_PIN (17) // On wroover module, this is PSRAM clock
-#define TDI_PIN (13) //
-#define TDO_PIN (14) //
-#define TCK_PIN (12) //
-/* These are used for input JTAG on esp32
-2 	MTDO / GPIO15 	TDO
-3 	MTDI / GPIO12 	TDI
-4 	MTCK / GPIO13 	TCK
-5 	MTMS / GPIO14 	TMS
-*/
+#define TMS_PIN       (8) // On wroover module, this is PSRAM clock
+#define TDI_PIN       (9) //
+#define TDO_PIN       (10) //
+#define TCK_PIN       (11) //
+#define TRACESWO_PIN  (12)
+#define SWDIO_PIN     (13)  // On wroover module, this is PSRAM clock
+#define SWCLK_PIN     (14)
 
-//#define PLATFORM_HAS_TRACESWO 1
-#define TRACESWO_PIN 13
-// Workaround for driver
+
 #define TRACESWO_DUMMY_TX 19
-
-// ON ESP32 we dont have the PORTS (unlike stm32), this is dummy value to keep things similar as other platforms
 #define SWCLK_PORT  0
 #define SWDIO_PORT  0
 
-#define SWDIO_PIN (17)  // On wroover module, this is PSRAM clock
-#define SWCLK_PIN (23)
+extern void bmp_gpio_write(int pin, int value);
+extern int  bmp_gpio_read(int pin);
+extern void bmp_gpio_drive_state(int pin, int driven);
 
-#define gpio_set_val(port, pin, value) {}
-#define gpio_set(port, pin) {}
-#define gpio_clear(port, pin) {}
-#define gpio_get(port, pin) 0
-#define SWDIO_MODE_FLOAT() {}
-#define SWDIO_MODE_DRIVE() {}
-
-//#define PLATFORM_HAS_DEBUG 1
-//#define ENABLE_DEBUG 1
+#define gpio_set_val(port, pin, value)  bmp_gpio_write(pin,value)
+#define gpio_set(port, pin)             bmp_gpio_write(pin,1)
+#define gpio_clear(port, pin)           bmp_gpio_write(pin,0)
+#define gpio_get(port, pin)             bmp_gpio_read(pin)
+#define SWDIO_MODE_FLOAT() {}           bmp_gpio_drive_state(SWDIO_PIN,false)
+#define SWDIO_MODE_DRIVE() {}           bmp_gpio_drive_state(SWDIO_PIN,true)
 
 extern uint32_t swd_delay_cnt;
 
